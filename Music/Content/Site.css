@@ -22,3 +22,43 @@ select,
 textarea {
     max-width: 280px;
 }
+
+    .gTable {
+        border-collapse: collapse;
+        border: 1px solid #c0c0c0;
+        width: 100%;
+    }
+
+.gTable a {
+    color: white;
+}
+
+.gTable tr td {
+    padding: 5px;
+    border: 1px solid #c0c0c0;
+}
+
+.gTable tr:nth-child(2n+1) {
+    background-color: #eaeaea;
+}
+
+.gTable tr th {
+   background-color: darkred;
+}
+
+.gTable tfoot tr td {
+   background-color: darkred;
+   font-weight: bold;
+   color: white;
+}
+.gTable tfoot tr td  a {
+   border: 1px solid white;
+   border-radius: 5px;
+   padding: 5px;
+}
+
+.gTable tfoot tr td  a:hover {
+   background-color: #c0c0c0;
+   text-decoration: none;
+}
+.btn

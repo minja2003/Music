@@ -15,9 +15,14 @@ namespace Music.Controllers
         private MusicContext db = new MusicContext();
 
         // GET: Albums
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
-            var albums = db.Albums.Include(a => a.Artist).Include(a => a.Genre);
+            var albums = db.Albums.Include(a => a.Artist).Include(a => a.GenreL);
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                albums = albums.Where(s => s.Artist.Name.Contains(searchString) || s.GenreL.Name.Contains(searchString) || s.Title.Contains(searchString));
+            }
+
             return View(albums.ToList());
         }
 
@@ -28,7 +33,7 @@ namespace Music.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Album album = db.Albums.Include(a => a.Artist).Include(a => a.Genre).Where(a => a.AlbumID == id).Single();
+            Album album = db.Albums.Include(a => a.Artist).Include(a => a.GenreL).Where(a => a.AlbumID == id).Single();
             if (album == null)
             {
                 return HttpNotFound();
@@ -124,6 +129,24 @@ namespace Music.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Like(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Album album = db.Albums.Find(id);
+            album.Likes += 1;
+            db.Entry(album).State = EntityState.Modified;
+            db.SaveChanges();
+
+            if (album == null)
+            {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Index");
+            
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

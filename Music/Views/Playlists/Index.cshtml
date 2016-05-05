@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Music.Models.Playlist>
+@{
+    ViewBag.Title = "Playlist List";
+}
+<h2>Playlists</h2>
+<p>
+    @Html.ActionLink("Create New Playlist", "Create", null, new { @class = "btn btn-primary btn-large" })
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <p>
+                    <a href="~/Playlists/Edit" class="btn btn-warning">Edit</a>
+
+                    <a href="~/Playlists/Delete" class="btn btn-danger">Delete</a>
+                </p>
+
+
+            </td>
+
+
+        </tr>
+    }
+</table>

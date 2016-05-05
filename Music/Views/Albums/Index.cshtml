@@ -1,51 +1,62 @@
 ﻿@model IEnumerable<Music.Models.Album>
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Album List";
+    string likes = Html.DisplayNameFor(model => model.Likes).ToString();
 }
+<h2>Album List</h2>
+<div>
+    <p>
+        @Html.ActionLink("Add Album", "Create", null, new { @class = "btn btn-primary btn-large" })
+        @using (Html.BeginForm())
+        {
+        <p>
+            <input type="submit" value="Search" />@Html.TextBox("SearchString")<br />
+        </p>
+        }
 
-<h2>Index</h2>
+        </p>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Artist)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Genre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th></th>
-    </tr>
+        @{
+            var grid = new WebGrid(Model, canPage: true, rowsPerPage: 4,
+            selectionFieldName: "selectedRow", ajaxUpdateContainerId: "gridContent");
+            grid.Pager(WebGridPagerModes.NextPrevious);}
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Artist.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Genre.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AlbumID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AlbumID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AlbumID })
-        </td>
-    </tr>
-}
+        <div id="gridContent">
+            @grid.GetHtml(tableStyle: "gTable",
+            headerStyle: "header",
+            alternatingRowStyle: "alt",
+            selectedRowStyle: "select",
+            columns: grid.Columns(
 
-</table>
+            grid.Column("Title", "Title"),
+
+            grid.Column("Artist.Name", "Artist"),
+            grid.Column("GenreL.Name", "Genre"),
+            grid.Column("Price", "Price"),
+
+            grid.Column(likes, "Likes", format: @<text> @item.Likes
+            <a title="Like" class="btn btn-sm btn-success" onclick="location.href='@Url.Action("Like", new { id = item.AlbumID })'">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+            </a></text>),
+
+
+
+
+                grid.Column(format: @<text>
+                    <a title="Add to playlist" class="btn btn-sm btn-primary " onclick="location.href='@Url.Action("", new { id = item.AlbumID })'">
+                        <span class="glyphicon glyphicon-list-alt"></span>
+
+                        <a title="Edit" class="btn btn-sm btn-warning" onclick="location.href='@Url.Action("Edit", new { id = item.AlbumID })'">
+                            <span class="glyphicon glyphicon-edit"></span>
+
+                            <a title="Details" class="btn btn-sm btn-info" onclick="location.href='@Url.Action("Details", new { id = item.AlbumID })'">
+                                <span class="glyphicon glyphicon-info-sign"></span>
+
+                                <a title="Delete" class="btn btn-sm btn-danger" onclick="location.href='@Url.Action("Delete", new { id = item.AlbumID })'">
+                                    <span class="glyphicon glyphicon-trash"></span>
+
+                                </a></text>)
+
+                       ))
+</div>
+</div>
